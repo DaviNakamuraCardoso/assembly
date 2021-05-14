@@ -3,7 +3,7 @@ global main
 extern printf
 
 section .data
-    msg db "Testing %i...", 0x0a, 0x00
+    msg db "Testing %i, %i...", 0x0a, 0x00
 
 section .text
 
