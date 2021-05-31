@@ -2,62 +2,60 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <pthread.h>
 #include "factorial.h"
 
 extern long factorial(long a);
 
+pthread_mutex_t gcc_lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t davi_lock = PTHREAD_MUTEX_INITIALIZER;
+
+long DAVI, GCC = 0;
+
 int main(void)
 {
-    long my, gcc;
-
-    my = benchmark(factorial);
-    gcc = benchmark(gcc_factorial);
-
-    printf("My  is \t%li\n", my);
-    printf("GCC is \t%li\n", gcc);
-
-    if (gcc > my) printf("GCC wins.\n");
-    else if (my > gcc) printf("Davi wins.\n");
-    else printf("Tie.\n");
-
-
+    benchmark(run_davi);
     return 0;
 }
 
-long gcc_factorial(long a)
-{
-    if (a <= 1) return 1;
-    return (a * gcc_factorial(a-1));
-}
 
-// Runs a function for 5 seconds
-long benchmark(long (*function) (long))
+void* run_davi(void* v)
 {
-    long a, b, counter;
     clock_t start, end;
 
     long cmp[] = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880};
 
-    a = 0;
-    counter = 0;
-    start = clock();
+    for (long i = 0; i < 125000000; i++)
+    {
+        factorial(10);
+        DAVI =  DAVI + 1;
 
-    do {
+    }
 
-        b = function(a);
+    return NULL;
 
-        // Make sure the result is correct
-        if (cmp[a] != b) printf("Error in comparison\n");
+}
 
-        counter++;
-        a++;
 
-        // Reset a to 1 if a >= 10
-        if (a >= 10) a = 0;
+void benchmark(void* (*runner) (void*))
+{
+    int size = 8;
+    pthread_t threads[8];
+    void* result;
+    clock_t now = clock();
 
-        end = clock();
 
-    } while ((end - start) / CLOCKS_PER_SEC < 5);
+    for (short s = 0; s < size; s++)
+    {
+        pthread_create(&threads[s], NULL, runner, NULL);
+    }
 
-    return counter;
+    for (short t = 0; t < size; t++)
+    {
+        pthread_join(threads[t], &result);
+    }
+
+
+    printf("%lf\n", (double) (clock()- now) / CLOCKS_PER_SEC);
+
 }
