@@ -9,12 +9,12 @@ sqroot:
     ;;
     mov     rbx, 0x80000000 ; tmp
     mov     rcx, 0x00       ; y
-    mov     rdx, 0x1f       ; j
+    mov     rdx, 31 ; j
     mov     rsi, 0x00       ; tmp3
 
     for:
     cmp     rdx, 0x00
-    jle     endfor
+    jl      endfor
 
     mov     rax, rbx
     mul     rax
@@ -46,5 +46,6 @@ sqroot:
 
 shift:
     mov     rbx, 0x80000000 ; tmp
+    shr     rbx, 0x01
     mov     rax, rbx
     ret
