@@ -20,8 +20,10 @@ unsigned long sqrc(unsigned long a)
 {
     unsigned long a;
 
-    for (int j = 63; j >= 0; j--)
+    for (short j = 63; j >= 0; j--)
     {
-        57897705
+        // 57897705
+
+
     }
 }
