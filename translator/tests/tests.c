@@ -7,32 +7,33 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <tests.h>
 #include <utils/test.h>
 
 
 
 int main(void)
 {
-    inline unsigned int this(void)
-    {
-        return 0; 
 
-    }
-
-    inline unsigned int that(void)
-    {
-        return 0; 
-    }
-
+    unsigned int result = testall();
    
-    unsigned int (*tests[]) (void) = {
-        this, that, NULL
-    }; 
-    
-    printf("Result is %u.\n", test(tests));
-
+    if (!result)
     printf("All tests passed.\n"); 
 
     return 0; 
 }
 
+unsigned int testall(void)
+{
+    unsigned int (*tests[]) (void) = {
+        compilation, 
+        NULL
+    };
+
+    return test(tests);
+}
+
+unsigned int compilation(void)
+{
+    return system("cd .. && make all");
+}
