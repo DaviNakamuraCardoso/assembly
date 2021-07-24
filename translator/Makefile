@@ -3,11 +3,34 @@
 #
 # 
 #
+#
+# 
+
+CC = gcc 
+
+
+# Header files 
+H = ./include
+L = ./libs
+
+
+./libs/lib%.a:  
+	ar -rcs $@ $^
 
 %.o: %.c
-	gcc -c $^ -o $@
+	$(CC) -I $(H) -c $^ -o $@
 
-all: main.o
-	gcc $^ -o jack 
+./obj/%.o: ./src/%.c
+	$(CC) -I $(H) -c $^ -o $@
+
+LIBS = ./libs/libparser.a
+
+
+all: main.o $(LIBS) 
+	$(CC) -L $(L) main.o -o jack -lparser 
 	
 
+
+PARSER = ./obj/parser/parser.o
+
+./libs/libparser.a: $(PARSER)
