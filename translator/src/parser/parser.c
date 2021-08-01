@@ -1,12 +1,15 @@
+/*
+ *
+ *      Parser module 
+ *
+ */
+
 #include <stdio.h>
+#include <parser/parser.h> 
 
 
-void htimes(void)
+cmd* new_command(const char* command)
 {
-    printf("Happy Times.\n");
-    return;
-
+    return NULL;
 }
-
-
 
